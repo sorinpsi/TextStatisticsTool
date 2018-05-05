@@ -23,6 +23,7 @@ public class Controller extends Application {
     private TableView most;
     private TableView least;
     private Service service = new Service();
+    Button run;
 
     public static void main(String[] args) {
         launch(args);
@@ -30,16 +31,19 @@ public class Controller extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        service.startConnection();
         primaryStage.setTitle("Challenge");
         BorderPane borderPane = loadBorderPane();
         Scene scene = new Scene(borderPane, 410, 480);
         primaryStage.setScene(scene);
+        primaryStage.setOnCloseRequest(e -> service.closeConnection());
         primaryStage.show();
     }
 
     private BorderPane loadBorderPane() {
         Button open = new Button("Open");
-        Button run = new Button("Run");
+        run = new Button("Run");
+        run.setDisable(true);
         open.setOnAction(o -> showSingleFileChooser());
         run.setOnAction(r -> getStatistics());
         BorderPane borderPane = new BorderPane();
@@ -85,8 +89,9 @@ public class Controller extends Application {
         File selectedFile = fileChooser.showOpenDialog(null);
 
         if (selectedFile != null) {
-            //set waiter closed by boolean
-            service.processFile(selectedFile);
+            service.cleanCollection();
+            boolean effect = service.processFile(selectedFile);
+            run.setDisable(!effect);
         }
     }
 
