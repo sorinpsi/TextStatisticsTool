@@ -39,7 +39,7 @@ class Service {
         }
 
         Map<String, Long> wordMap = wordCount.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-
+        wordMap.remove("");
         List<PersistTextTask> runnableList = persistText(wordMap);
         runnableList.forEach(executor::submit);
 
@@ -48,7 +48,7 @@ class Service {
     }
 
 
-    Map<Boolean, List<Pair<Long, String>>> getResults(Long amount) {
+    Map<Boolean, List<Pair<Long, String>>> getResults(int amount) {
         return dbConnection.getResultsFromDB(amount);
     }
 
@@ -89,9 +89,9 @@ class Service {
     private List<PersistTextTask> persistText(Map<String, Long> wordMap){
         List<PersistTextTask> runnableList = new ArrayList<>();
         TreeMap<String, Long> treeMap = new TreeMap<>(wordMap);
-        for(int i = 0, j=100; i<wordMap.size(); i+=j){
-            int lastIndex = wordMap.size()<i+j ? wordMap.size()-1 : i+j;
-            runnableList.add(new PersistTextTask(treeMap.subMap((String)treeMap.keySet().toArray()[i], (String)treeMap.keySet().toArray()[lastIndex])));
+        for(int i = 0, j=100; i<treeMap.size(); i=i+j+1){
+            int lastIndex = treeMap.size()<i+j ? treeMap.size()-1 : i+j;
+            runnableList.add(new PersistTextTask(treeMap.subMap((String)treeMap.keySet().toArray()[i], true, (String)treeMap.keySet().toArray()[lastIndex], true)));
         }
         return runnableList;
     }

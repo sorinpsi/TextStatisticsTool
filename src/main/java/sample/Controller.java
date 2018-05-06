@@ -1,10 +1,13 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -23,7 +26,7 @@ public class Controller extends Application {
     private TableView most;
     private TableView least;
     private Service service = new Service();
-    Button run;
+    private Button run;
 
     public static void main(String[] args) {
         launch(args);
@@ -74,11 +77,16 @@ public class Controller extends Application {
         least.setEditable(false);
         most.setMaxSize(200, 450);
         least.setMaxSize(200, 450);
-        TableColumn number = new TableColumn("No of Times");
-        TableColumn mostWord = new TableColumn("Most Word");
-        TableColumn leastWord = new TableColumn("Least Word");
-        most.getColumns().addAll(number, mostWord);
-        least.getColumns().addAll(number, leastWord);
+        TableColumn<WordCount, Long> mostNumber = new TableColumn<>("No of Times");
+        TableColumn<WordCount, Long> leastNumber = new TableColumn<>("No of Times");
+        TableColumn<WordCount, String> mostWord = new TableColumn<>("Most Word");
+        TableColumn<WordCount, String> leastWord = new TableColumn<>("Least Word");
+        mostNumber.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        leastNumber.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        mostWord.setCellValueFactory(new PropertyValueFactory<>("word"));
+        leastWord.setCellValueFactory(new PropertyValueFactory<>("word"));
+        most.getColumns().addAll(mostNumber, mostWord);
+        least.getColumns().addAll(leastNumber, leastWord);
         gridPane.add(mostScroll, 0, 0);
         gridPane.add(leastScroll, 1, 0);
     }
@@ -97,7 +105,7 @@ public class Controller extends Application {
 
     private void getStatistics() {
         String text = textField.getText();
-        Long amount = Long.decode(text);
+        int amount = Integer.parseInt(text);
         most.getItems().clear();
         least.getItems().clear();
         Map<Boolean, List<Pair<Long, String>>> results = service.getResults(amount);
@@ -118,19 +126,11 @@ public class Controller extends Application {
 }
 
 class WordCount {
-    private final Long times;
-    private final String word;
+    private final SimpleLongProperty amount;
+    private final SimpleStringProperty word;
 
-    WordCount(Long times, String word) {
-        this.times = times;
-        this.word = word;
-    }
-
-    public Long getTimes() {
-        return times;
-    }
-
-    public String getWord() {
-        return word;
+    WordCount(Long amount, String word) {
+        this.amount = new SimpleLongProperty(amount);
+        this.word = new SimpleStringProperty(word);
     }
 }
