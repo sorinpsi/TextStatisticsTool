@@ -1,8 +1,6 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -122,15 +120,5 @@ public class Controller extends Application {
         least.setItems(leastWordList);
         most.refresh();
         least.refresh();
-    }
-}
-
-class WordCount {
-    private final SimpleLongProperty amount;
-    private final SimpleStringProperty word;
-
-    WordCount(Long amount, String word) {
-        this.amount = new SimpleLongProperty(amount);
-        this.word = new SimpleStringProperty(word);
     }
 }

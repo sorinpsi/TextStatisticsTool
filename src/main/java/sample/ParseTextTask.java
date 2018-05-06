@@ -1,6 +1,8 @@
 package sample;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 public class ParseTextTask implements Callable<List<String>> {

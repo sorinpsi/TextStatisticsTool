@@ -38,7 +38,7 @@ class Service {
             return false;
         }
 
-        Map<String, Long> wordMap = wordCount.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        Map<String, Long> wordMap = wordCount.stream().map(String::toLowerCase).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
         wordMap.remove("");
         List<PersistTextTask> runnableList = persistText(wordMap);
         runnableList.forEach(executor::submit);
@@ -65,7 +65,7 @@ class Service {
         dbConnection.cleanCollection();
     }
 
-    private List<ParseTextTask> decodeFile(File file){
+    private List<ParseTextTask> decodeFile(File file) {
         List<ParseTextTask> parseTextTaskList = new ArrayList<>();
         try {
             BufferedReader bReader = new BufferedReader(new FileReader(file));
@@ -86,12 +86,12 @@ class Service {
         return parseTextTaskList;
     }
 
-    private List<PersistTextTask> persistText(Map<String, Long> wordMap){
+    private List<PersistTextTask> persistText(Map<String, Long> wordMap) {
         List<PersistTextTask> runnableList = new ArrayList<>();
         TreeMap<String, Long> treeMap = new TreeMap<>(wordMap);
-        for(int i = 0, j=100; i<treeMap.size(); i=i+j+1){
-            int lastIndex = treeMap.size()<i+j ? treeMap.size()-1 : i+j;
-            runnableList.add(new PersistTextTask(treeMap.subMap((String)treeMap.keySet().toArray()[i], true, (String)treeMap.keySet().toArray()[lastIndex], true)));
+        for (int i = 0, j = 100; i < treeMap.size(); i = i + j + 1) {
+            int lastIndex = treeMap.size() < i + j ? treeMap.size() - 1 : i + j;
+            runnableList.add(new PersistTextTask(treeMap.subMap((String) treeMap.keySet().toArray()[i], true, (String) treeMap.keySet().toArray()[lastIndex], true)));
         }
         return runnableList;
     }
