@@ -122,9 +122,9 @@ public class Controller extends Application {
             boolean effect = service.processFile(selectedFile);
             if (effect) {
                 messages.setText("Enter number of words to be returned.");
-                run.setDisable(!effect);
-                textFieldServer.setDisable(effect);
-                textFieldPort.setDisable(effect);
+                run.setDisable(false);
+                textFieldServer.setDisable(true);
+                textFieldPort.setDisable(true);
             } else {
                 messages.setText("File could not be processed. It should be txt or xml.");
             }

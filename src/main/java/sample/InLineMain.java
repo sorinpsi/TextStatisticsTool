@@ -11,10 +11,10 @@ import java.util.Map;
 
 public class InLineMain {
 
-    static String source = "-source";
-    static String spareSource = "big.txt";
-    static String mongo = "-mongo";
-    static String spareMongo = "localhost:27017";
+    private static String source = "-source";
+    private static String spareSource = "big.txt";
+    private static String mongo = "-mongo";
+    private static String spareMongo = "localhost:27017";
     /*
         java –Xmx8192m -jar challenge.jar –source dump.xml –mongo [hostname]:[port]
     */
