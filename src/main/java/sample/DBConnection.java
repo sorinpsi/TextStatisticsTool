@@ -6,7 +6,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import javafx.util.Pair;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
 class DBConnection {
     private MongoClient mongoClient;
     private MongoCollection<Document> wordCollection;
-    private Bson condition = new Document();
 
     void persistWords(List<Document> documents) {
         wordCollection.insertMany(documents);
@@ -52,6 +50,6 @@ class DBConnection {
     }
 
     void cleanCollection() {
-        wordCollection.deleteMany(condition);
+        wordCollection.drop();
     }
 }

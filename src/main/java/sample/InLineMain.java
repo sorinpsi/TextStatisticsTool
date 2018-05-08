@@ -22,7 +22,7 @@ public class InLineMain {
         Service service = new Service();
         String fileName = getArg(args, source, spareSource);
         String server = getArg(args, mongo, spareMongo);
-        if(!service.startConnection(server)) return;
+        service.startConnection(server);
         boolean done = service.processFile(new File(fileName));
         if(done){
             Map<Boolean, List<Pair<Long, String>>> results = service.getResults(Integer.parseInt(args[1]));

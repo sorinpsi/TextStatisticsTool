@@ -53,13 +53,11 @@ class Service {
         return dbConnection.getResultsFromDB(amount);
     }
 
-    boolean startConnection(String server) {
+    void startConnection(String server) {
         if(dbConnection == null) {
             this.server = server;
             dbConnection = new DBConnection();
-            return (dbConnection.startConnection(server));
-        } else {
-            return true;
+            dbConnection.startConnection(server);
         }
     }
 

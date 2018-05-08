@@ -63,7 +63,7 @@ public class Controller extends Application {
         textFieldNo = new TextField();
         textFieldNo.textProperty().addListener((observable, oldValue, newValue) ->
         {
-            if (!newValue.matches("\\d*") || newValue.length()>6) textFieldNo.setText(oldValue);
+            if (!newValue.matches("\\d*") || newValue.length() > 6) textFieldNo.setText(oldValue);
         });
         textFieldServer = new TextField();
         textFieldServer.setText(serverDefault);
@@ -117,21 +117,16 @@ public class Controller extends Application {
         File selectedFile = fileChooser.showOpenDialog(null);
 
         if (selectedFile != null) {
-            boolean success = service.startConnection(String.join(":", textFieldServer.getText(), textFieldPort.getText()));
-            if(!success){
-                messages.setText("Connection failed. Please check server info!");
-                return;
+            service.startConnection(String.join(":", textFieldServer.getText(), textFieldPort.getText()));
+            service.cleanCollection();
+            boolean effect = service.processFile(selectedFile);
+            if (effect) {
+                messages.setText("Enter number of words to be returned.");
+                run.setDisable(!effect);
+                textFieldServer.setDisable(effect);
+                textFieldPort.setDisable(effect);
             } else {
-                textFieldServer.setDisable(success);
-                textFieldPort.setDisable(success);
-                service.cleanCollection();
-                boolean effect = service.processFile(selectedFile);
-                if(effect) {
-                    messages.setText("File could not be processed. It should be txt or xml.");
-                    run.setDisable(!effect);
-                } else {
-                    messages.setText("Enter number of words to be returned.");
-                }
+                messages.setText("File could not be processed. It should be txt or xml.");
             }
         }
     }
