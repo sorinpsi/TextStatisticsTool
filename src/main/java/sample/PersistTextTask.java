@@ -8,15 +8,17 @@ import java.util.Map;
 
 public class PersistTextTask implements Runnable {
     private Map<String, Long> wordMap;
+    private String server;
 
-    PersistTextTask(Map<String, Long> wordMap) {
+    PersistTextTask(Map<String, Long> wordMap, String server) {
         this.wordMap = wordMap;
+        this.server = server;
     }
 
     @Override
     public void run() {
         DBConnection dbConnection = new DBConnection();
-        dbConnection.startConnection();
+        if(!dbConnection.startConnection(this.server)) return;
         List<Document> documents = new ArrayList<>();
         wordMap.forEach((word, num) -> {
             Document newDoc = new Document();

@@ -3,7 +3,17 @@
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/org/mongodb/mongo-java-driver/3.7.0/mongo-java-driver-3.7.0.jar!/" />
     </CLASSES>
-    <JAVADOC />
-    <SOURCES />
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/mongodb/mongo-java-driver/3.7.0/mongo-java-driver-3.7.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/mongodb/mongo-java-driver/3.7.0/mongo-java-driver-3.7.0-sources.jar!/" />
+      <root url="file://C:/Program Files/Java/jdk1.8.0_172" />
+    </SOURCES>
+    <excluded>
+      <root url="jar://C:/Program Files/Java/jdk1.8.0_172/javafx-src.zip!/" />
+      <root url="jar://C:/Program Files/Java/jdk1.8.0_172/src.zip!/" />
+    </excluded>
+    <jarDirectory url="file://C:/Program Files/Java/jdk1.8.0_172" recursive="false" type="SOURCES" />
   </library>
 </component>

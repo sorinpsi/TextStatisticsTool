@@ -39,10 +39,12 @@ class DBConnection {
         return resultsMap;
     }
 
-    void startConnection() {
-        mongoClient = new MongoClient("localhost", 27017);
+    boolean startConnection(String server) {
+        String[] serverDetails = server.split(":");
+        mongoClient = new MongoClient(serverDetails[0], Integer.parseInt(serverDetails[1]));
         MongoDatabase db = mongoClient.getDatabase("wordDB");
         wordCollection = db.getCollection("wordCollection");
+        return true;
     }
 
     void closeConnection() {

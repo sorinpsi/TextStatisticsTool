@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 class Service {
 
     private DBConnection dbConnection;
+    private String server;
 
     boolean processFile(File file) {
         ExecutorService executor = Executors.newCachedThreadPool();
@@ -52,13 +53,20 @@ class Service {
         return dbConnection.getResultsFromDB(amount);
     }
 
-    void startConnection() {
-        dbConnection = new DBConnection();
-        dbConnection.startConnection();
+    boolean startConnection(String server) {
+        if(dbConnection == null) {
+            this.server = server;
+            dbConnection = new DBConnection();
+            return (dbConnection.startConnection(server));
+        } else {
+            return true;
+        }
     }
 
     void closeConnection() {
-        dbConnection.closeConnection();
+        if(dbConnection!=null) {
+            dbConnection.closeConnection();
+        }
     }
 
     void cleanCollection() {
@@ -91,7 +99,8 @@ class Service {
         TreeMap<String, Long> treeMap = new TreeMap<>(wordMap);
         for (int i = 0, j = 100; i < treeMap.size(); i = i + j + 1) {
             int lastIndex = treeMap.size() < i + j ? treeMap.size() - 1 : i + j;
-            runnableList.add(new PersistTextTask(treeMap.subMap((String) treeMap.keySet().toArray()[i], true, (String) treeMap.keySet().toArray()[lastIndex], true)));
+            runnableList.add(new PersistTextTask(treeMap.subMap((String) treeMap.keySet().toArray()[i], true,
+                    (String) treeMap.keySet().toArray()[lastIndex], true), server));
         }
         return runnableList;
     }
