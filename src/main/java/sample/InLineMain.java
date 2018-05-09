@@ -10,7 +10,7 @@ import java.util.Map;
 public class InLineMain {
 
     private static String source = "-source";
-    private static String defaultSource = "small.txt";
+    private static String defaultSource = "big.txt";
     private static String mongo = "-mongo";
     private static String defaultMongo = "localhost:27017";
     private static String amount = "-amount";
@@ -52,7 +52,7 @@ public class InLineMain {
         results.get(true).forEach(pair -> System.out.println(pair.getKey() + " : " + pair.getValue()));
         System.out.println();
         System.out.println();
-        System.out.print("Least " + amount + " used words");
+        System.out.println("Least " + amount + " used words");
         results.get(false).forEach(pair -> System.out.println(pair.getKey() + " : " + pair.getValue()));
     }
 }
