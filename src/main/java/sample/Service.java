@@ -2,10 +2,7 @@ package sample;
 
 import javafx.util.Pair;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +51,7 @@ class Service {
     }
 
     void startConnection(String server) {
-        if(dbConnection == null) {
+        if (dbConnection == null) {
             this.server = server;
             dbConnection = new DBConnection();
             dbConnection.startConnection(server);
@@ -62,7 +59,7 @@ class Service {
     }
 
     void closeConnection() {
-        if(dbConnection!=null) {
+        if (dbConnection != null) {
             dbConnection.closeConnection();
         }
     }
@@ -102,4 +99,5 @@ class Service {
         }
         return runnableList;
     }
+
 }

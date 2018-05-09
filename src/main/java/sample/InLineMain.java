@@ -2,9 +2,7 @@ package sample;
 
 import javafx.util.Pair;
 
-import java.io.Console;
 import java.io.File;
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -12,40 +10,49 @@ import java.util.Map;
 public class InLineMain {
 
     private static String source = "-source";
-    private static String spareSource = "big.txt";
+    private static String defaultSource = "small.txt";
     private static String mongo = "-mongo";
-    private static String spareMongo = "localhost:27017";
-    /*
-        java –Xmx8192m -jar challenge.jar –source dump.xml –mongo [hostname]:[port]
-    */
-    public static void main(String[] args){
+    private static String defaultMongo = "localhost:27017";
+    private static String amount = "-amount";
+    private static String defaultAmount = "100";
+    private static String loadFile = "-load";
+    private static String defaultloadFile = "true";
+
+    public static void main(String[] args) {
         Service service = new Service();
-        String fileName = getArg(args, source, spareSource);
-        String server = getArg(args, mongo, spareMongo);
-        service.startConnection(server);
-        boolean done = service.processFile(new File(fileName));
-        if(done){
-            Map<Boolean, List<Pair<Long, String>>> results = service.getResults(Integer.parseInt(args[1]));
-            if (results == null) {
-                return;
-            }
-            printResults(results);
+        String finalSource = getArg(args, source, defaultSource);
+        String finalMongo = getArg(args, mongo, defaultMongo);
+        String stringAmount = getArg(args, amount, defaultAmount);
+        boolean finalLoadFile = Boolean.valueOf(getArg(args, loadFile, defaultloadFile));
+        int finalAmount = 0;
+        try {
+            finalAmount = Integer.parseInt(stringAmount);
+        } catch (NumberFormatException ignored) {
+        }
+        service.startConnection(finalMongo.trim());
+        boolean done = !finalLoadFile || service.processFile(new File(finalSource));
+        if (done) {
+            Map<Boolean, List<Pair<Long, String>>> results = service.getResults(finalAmount);
+            printResults(results, finalAmount);
         }
     }
 
     private static String getArg(String[] args, String keyWord, String spare) {
-        return Arrays.stream(args).filter(keyWord::equalsIgnoreCase).findFirst().orElse(spare);
+        List<String> argsArray = Arrays.asList(args);
+        if (argsArray.indexOf(keyWord) > -1) {
+            return argsArray.get(argsArray.indexOf(keyWord) + 1);
+        } else {
+            return spare;
+        }
     }
 
-    private static void printResults(Map<Boolean, List<Pair<Long, String>>> results){
-        Console console = System.console();
-        PrintWriter writer = console.writer();
-        writer.println();
-        writer.print("Most 50 used words");
-        results.get(true).forEach(pair -> writer.print(pair.getKey()+" : "+pair.getValue()));
-        writer.println();
-        writer.println();
-        writer.print("Least 50 used words");
-        results.get(false).forEach(pair -> writer.print(pair.getKey()+" : "+pair.getValue()));
+    private static void printResults(Map<Boolean, List<Pair<Long, String>>> results, int amount) {
+        System.out.println();
+        System.out.println("Most " + amount + " used words");
+        results.get(true).forEach(pair -> System.out.println(pair.getKey() + " : " + pair.getValue()));
+        System.out.println();
+        System.out.println();
+        System.out.print("Least " + amount + " used words");
+        results.get(false).forEach(pair -> System.out.println(pair.getKey() + " : " + pair.getValue()));
     }
 }

@@ -56,7 +56,7 @@ public class Controller extends Application {
         run.setOnAction(r -> getStatistics());
         BorderPane borderPane = new BorderPane();
         Label labelNo = new Label("No. of results:");
-        Label labelServer = new Label("Server address;");
+        Label labelServer = new Label("Server Address:");
         Label labelPort = new Label("Port:");
         messages = new Label("Enter 0 for the entire list.");
         messages.setTextFill(Color.CRIMSON);

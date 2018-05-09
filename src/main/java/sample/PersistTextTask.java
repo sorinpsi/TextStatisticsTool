@@ -18,7 +18,7 @@ public class PersistTextTask implements Runnable {
     @Override
     public void run() {
         DBConnection dbConnection = new DBConnection();
-        if(!dbConnection.startConnection(this.server)) return;
+        if (!dbConnection.startConnection(this.server)) return;
         List<Document> documents = new ArrayList<>();
         wordMap.forEach((word, num) -> {
             Document newDoc = new Document();
